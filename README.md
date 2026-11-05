@@ -22,7 +22,7 @@
 
 <p>
   <a href="#-highlights">Highlights</a> •
-  <a href="#-screenshots">Screenshots</a> •
+  <a href="#-app-preview">App Preview</a> •
   <a href="#-tech-stack">Tech Stack</a> •
   <a href="#-getting-started">Getting Started</a> •
   <a href="#-project-structure">Structure</a>
@@ -72,15 +72,17 @@ and hand-rolled `CustomPainter`s. No heavyweight animation packages, no Lottie.
 
 ---
 
-## 📸 Screenshots
+## 📸 App Preview
 
-> _GIFs coming soon._ Drop recordings into `docs/` and uncomment the table below.
-
-<!--
 <div align="center">
 
-| Onboarding | Home | Details |
-| :---: | :---: | :---: |
+<img src="assets/food_animations-flutter.gif" alt="Food Animation app preview" width="300"/>
+
+<sub>Onboarding → Home → Recipe Details → Checkout → Payment → Success</sub>
+
+</div>
+
+---: | :---: | :---: |
 | <img src="docs/onboarding.gif" width="220"/> | <img src="docs/home.gif" width="220"/> | <img src="docs/details.gif" width="220"/> |
 
 | Checkout | Payment | Success |
