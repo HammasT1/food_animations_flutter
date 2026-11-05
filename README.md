@@ -82,16 +82,6 @@ and hand-rolled `CustomPainter`s. No heavyweight animation packages, no Lottie.
 
 </div>
 
----: | :---: | :---: |
-| <img src="docs/onboarding.gif" width="220"/> | <img src="docs/home.gif" width="220"/> | <img src="docs/details.gif" width="220"/> |
-
-| Checkout | Payment | Success |
-| :---: | :---: | :---: |
-| <img src="docs/checkout.png" width="220"/> | <img src="docs/payment.gif" width="220"/> | <img src="docs/success.gif" width="220"/> |
-
-</div>
--->
-
 ---
 
 ## 🧱 Tech Stack
