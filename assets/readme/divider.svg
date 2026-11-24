@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="24" viewBox="0 0 900 24">
+  <defs>
+    <linearGradient id="base" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#FF7043" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#FF7043" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#FF7043" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#FFD180" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#FFD180" stop-opacity="1"/>
+      <stop offset="1" stop-color="#FFD180" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="11" width="900" height="2" rx="1" fill="url(#base)"/>
+  <rect x="-180" y="10" width="180" height="4" rx="2" fill="url(#shine)">
+    <animate attributeName="x" from="-180" to="900" dur="3.2s" repeatCount="indefinite"/>
+  </rect>
+  <g fill="#FF7043">
+    <circle cx="430" cy="12" r="3">
+      <animate attributeName="r" values="2;4;2" dur="1.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="450" cy="12" r="3">
+      <animate attributeName="r" values="2;4;2" dur="1.6s" begin="0.25s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="470" cy="12" r="3">
+      <animate attributeName="r" values="2;4;2" dur="1.6s" begin="0.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>
