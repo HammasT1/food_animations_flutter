@@ -34,7 +34,11 @@ class _TimeLineWidgetState extends State<TimeLineWidget> {
         )
             .animate()
             .fadeIn(delay: stagger, duration: 420.ms, curve: Curves.easeOut)
-            .slideX(begin: 0.25, end: 0, delay: stagger, curve: Curves.easeOutCubic);
+            .slideX(
+                begin: 0.25,
+                end: 0,
+                delay: stagger,
+                curve: Curves.easeOutCubic);
       },
     );
   }
@@ -72,29 +76,25 @@ class _TimeLineWidgetState extends State<TimeLineWidget> {
                       .animate()
                       .scaleXY(begin: 0, end: 1, curve: Curves.easeOutBack)
                   : null,
-            )
-                .animate()
-                .scaleXY(
-                    begin: 0,
-                    end: 1,
-                    delay: stagger,
-                    duration: 380.ms,
-                    curve: Curves.elasticOut),
+            ).animate().scaleXY(
+                begin: 0,
+                end: 1,
+                delay: stagger,
+                duration: 380.ms,
+                curve: Curves.elasticOut),
             if (!isLast)
               Container(
                 width: 2,
                 height: 60,
                 margin: const EdgeInsets.symmetric(vertical: 2),
                 color: AppColors.timeLineColor,
-              )
-                  .animate()
-                  .scaleY(
-                      begin: 0,
-                      end: 1,
-                      alignment: Alignment.topCenter,
-                      delay: stagger + 150.ms,
-                      duration: 320.ms,
-                      curve: Curves.easeOut),
+              ).animate().scaleY(
+                  begin: 0,
+                  end: 1,
+                  alignment: Alignment.topCenter,
+                  delay: stagger + 150.ms,
+                  duration: 320.ms,
+                  curve: Curves.easeOut),
           ],
         ),
         const SizedBox(width: 12),

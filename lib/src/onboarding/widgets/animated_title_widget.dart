@@ -19,8 +19,10 @@ class AnimatedTitleWidget extends StatelessWidget {
     final words = Strings.onBoardingTitle.trim().split(' ');
 
     // Each word rises + unblurs on its own beat for a kinetic headline.
-    Widget wordChip(String text, int i, {Color? color}) {
-      return Text(text, style: baseStyle?.copyWith(color: color))
+    Widget wordChip(String text, int i, {Color? color, bool italic = false}) {
+      return Text(text,
+              style: baseStyle?.copyWith(
+                  color: color, fontStyle: italic ? FontStyle.italic : null))
           .animate()
           .fadeIn(
               delay: titleDelayDuration + (90 * i).ms,
@@ -41,17 +43,16 @@ class AnimatedTitleWidget extends StatelessWidget {
           runSpacing: 2,
           children: [
             for (var i = 0; i < words.length; i++) wordChip(words[i], i),
-            wordChip('everyday', words.length, color: AppColors.timeLineColor),
+            wordChip('everyday', words.length,
+                color: AppColors.timeLineColor, italic: true),
           ],
         ),
       ),
-    )
-        .animate()
-        .slideY(
-            begin: -0.15,
-            end: 0,
-            delay: titleDelayDuration,
-            duration: mainPlayDuration,
-            curve: Curves.easeOutCubic);
+    ).animate().slideY(
+        begin: -0.15,
+        end: 0,
+        delay: titleDelayDuration,
+        duration: mainPlayDuration,
+        curve: Curves.easeOutCubic);
   }
 }

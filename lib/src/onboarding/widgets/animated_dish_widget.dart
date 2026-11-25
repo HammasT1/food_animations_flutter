@@ -33,9 +33,7 @@ class AnimatedDishWidget extends StatelessWidget {
             height: 320,
             child: RisingParticles(count: 12, maxRadius: 30),
           ),
-        )
-            .animate()
-            .fadeIn(delay: 900.ms, duration: 1200.ms),
+        ).animate().fadeIn(delay: 900.ms, duration: 1200.ms),
 
         // ---- top-left leaves: fly in, spin to rest, then sway forever ----
         _Garnish(
@@ -75,7 +73,10 @@ class AnimatedDishWidget extends StatelessWidget {
                 onPlay: (c) => c.repeat(reverse: true),
               )
               .rotate(
-                  begin: -0.015, end: 0.015, duration: 3.seconds, curve: Curves.easeInOut),
+                  begin: -0.015,
+                  end: 0.015,
+                  duration: 3.seconds,
+                  curve: Curves.easeInOut),
         ),
 
         // ---- bottom-left leaves ----
@@ -135,7 +136,10 @@ class AnimatedDishWidget extends StatelessWidget {
                 onPlay: (c) => c.repeat(reverse: true),
               )
               .moveY(
-                  begin: 0, end: -14, duration: 2600.ms, curve: Curves.easeInOut)
+                  begin: 0,
+                  end: -14,
+                  duration: 2600.ms,
+                  curve: Curves.easeInOut)
               .rotate(
                   begin: -0.006,
                   end: 0.006,

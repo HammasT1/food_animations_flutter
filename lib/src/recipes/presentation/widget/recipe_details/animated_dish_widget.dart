@@ -25,7 +25,8 @@ class AnimatedDishWidget extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          const GlowBackdrop(size: 300, maxOpacity: 0.4, delay: Duration(milliseconds: 300)),
+          const GlowBackdrop(
+              size: 300, maxOpacity: 0.4, delay: Duration(milliseconds: 300)),
           const Positioned.fill(
             child: RisingParticles(count: 10, maxRadius: 26),
           ),

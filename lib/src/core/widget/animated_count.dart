@@ -52,7 +52,9 @@ class _AnimatedCountState extends State<AnimatedCount> {
       curve: Curves.easeOutExpo,
       builder: (context, v, _) => Text(
         '${v.round()}${widget.suffix}',
-        style: widget.style,
+        // fixed-width digits so the number doesn't jitter while counting
+        style: (widget.style ?? const TextStyle())
+            .copyWith(fontFeatures: const [FontFeature.tabularFigures()]),
       ),
     );
   }

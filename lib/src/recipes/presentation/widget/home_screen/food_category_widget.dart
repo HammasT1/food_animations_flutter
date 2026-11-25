@@ -24,14 +24,15 @@ class FoodCategoryWidget extends StatelessWidget {
         children: [
           Text(
             icon,
-            style: const TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 18),
           ),
           const SizedBox(
             width: 5,
           ),
           Text(
             name,
-            style: const TextStyle(fontSize: 20),
+            style: const TextStyle(
+                fontSize: 15, fontWeight: FontWeight.w600, letterSpacing: 0.2),
           )
         ],
       ),

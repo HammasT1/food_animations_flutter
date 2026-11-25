@@ -62,7 +62,8 @@ class AnimatedAppBarWidget extends StatelessWidget {
                 image: const DecorationImage(
                   image: AssetImage(Assets.profileImage),
                   fit: BoxFit.cover,
-                  alignment: Alignment(0, -0.72), // frame the face, not the torso
+                  alignment:
+                      Alignment(0, -0.72), // frame the face, not the torso
                 ),
               ),
             )

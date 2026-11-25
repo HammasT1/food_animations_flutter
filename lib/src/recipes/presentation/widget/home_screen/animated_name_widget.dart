@@ -17,7 +17,9 @@ class AnimatedNameWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text("Hello,", style: style)
+        Text("Hello,",
+                style: style?.copyWith(
+                    fontStyle: FontStyle.italic, color: Colors.white60))
             .animate()
             .fadeIn(delay: nameDelayDuration, duration: 400.ms)
             .slideX(begin: 0.3, end: 0, curve: Curves.easeOutCubic)

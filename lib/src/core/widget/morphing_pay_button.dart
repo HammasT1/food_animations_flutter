@@ -33,12 +33,12 @@ class _MorphingPayButtonState extends State<MorphingPayButton>
     with TickerProviderStateMixin {
   static const double _h = 64;
 
-  late final AnimationController _morph =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 340));
-  late final AnimationController _expand =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 520));
-  late final AnimationController _spin =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 900));
+  late final AnimationController _morph = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 340));
+  late final AnimationController _expand = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 520));
+  late final AnimationController _spin = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 900));
 
   _Phase _phase = _Phase.idle;
   bool _pressed = false;
@@ -87,7 +87,8 @@ class _MorphingPayButtonState extends State<MorphingPayButton>
     if (box == null || !box.hasSize) return;
     final center = box.localToGlobal(box.size.center(Offset.zero));
     final media = MediaQuery.of(context).size;
-    final diag = math.sqrt(media.width * media.width + media.height * media.height);
+    final diag =
+        math.sqrt(media.width * media.width + media.height * media.height);
     final maxScale = (diag / _h) * 1.15;
 
     _entry = OverlayEntry(
@@ -119,7 +120,8 @@ class _MorphingPayButtonState extends State<MorphingPayButton>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: _phase == _Phase.idle ? (_) => setState(() => _pressed = true) : null,
+      onTapDown:
+          _phase == _Phase.idle ? (_) => setState(() => _pressed = true) : null,
       onTapCancel: () => setState(() => _pressed = false),
       onTap: _phase == _Phase.idle
           ? () {
@@ -139,8 +141,8 @@ class _MorphingPayButtonState extends State<MorphingPayButton>
               builder: (context, _) {
                 final m = Curves.easeInOutCubic.transform(_morph.value);
                 final width = fullWidth - (fullWidth - _h) * m;
-                final showSpinner = _phase == _Phase.processing ||
-                    _phase == _Phase.expanding;
+                final showSpinner =
+                    _phase == _Phase.processing || _phase == _Phase.expanding;
                 return Center(
                   child: Container(
                     width: width,
@@ -186,12 +188,10 @@ class _MorphingPayButtonState extends State<MorphingPayButton>
           },
         ),
       ),
-    )
-        .animate(onPlay: (c) => c.repeat())
-        .shimmer(
-            delay: 1200.ms,
-            duration: 1800.ms,
-            color: Colors.white.withValues(alpha: 0.25));
+    ).animate(onPlay: (c) => c.repeat()).shimmer(
+        delay: 1200.ms,
+        duration: 1800.ms,
+        color: Colors.white.withValues(alpha: 0.25));
   }
 }
 

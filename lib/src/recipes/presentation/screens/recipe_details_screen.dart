@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dribbble_challenge/src/checkout/domain/order_draft.dart';
 import 'package:dribbble_challenge/src/core/theme/app_colors.dart';
+import 'package:dribbble_challenge/src/core/theme/app_theme.dart';
 import 'package:dribbble_challenge/src/core/widget/annotated_scaffold.dart';
 import 'package:dribbble_challenge/src/core/widget/animated_price.dart';
 import 'package:dribbble_challenge/src/core/widget/glass_container.dart';
@@ -106,14 +107,16 @@ class _OrderBar extends StatelessWidget {
               const Text('Order Now',
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold)),
+                      fontSize: 17,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.2)),
               AnimatedPrice(
                 value: unitPrice,
                 style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900),
+                    fontFamily: AppFonts.display,
+                    fontSize: 28,
+                    height: 1.1),
               ),
             ],
           ),

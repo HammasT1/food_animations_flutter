@@ -60,7 +60,10 @@ class _RisingParticlesState extends State<RisingParticles>
           builder: (_, __) => CustomPaint(
             size: Size.infinite,
             painter: _SteamPainter(
-                t: _c.value, particles: _p, color: widget.color, maxR: widget.maxRadius),
+                t: _c.value,
+                particles: _p,
+                color: widget.color,
+                maxR: widget.maxRadius),
           ),
         ),
       ),
@@ -98,8 +101,8 @@ class _SteamPainter extends CustomPainter {
     for (final p in particles) {
       final life = (t * p.speed + p.offset) % 1.0;
       final y = size.height * (1.0 - life);
-      final x = size.width *
-          (p.x + math.sin(p.phase + life * math.pi * 2) * p.sway);
+      final x =
+          size.width * (p.x + math.sin(p.phase + life * math.pi * 2) * p.sway);
       // fade in then out across its rise
       final opacity = (math.sin(life * math.pi)) * 0.28;
       final r = maxR * p.scale * (0.4 + life * 0.9);

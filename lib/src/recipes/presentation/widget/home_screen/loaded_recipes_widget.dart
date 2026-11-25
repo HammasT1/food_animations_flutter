@@ -40,7 +40,8 @@ class LoadedRecipesWidget extends StatelessWidget {
                     ..setEntry(3, 2, 0.0011)
                     ..translateByDouble(0.0, v * 34, 0.0, 1.0)
                     ..rotateX(-v * 1.05),
-                  child: Opacity(opacity: (1 - v).clamp(0.0, 1.0), child: child),
+                  child:
+                      Opacity(opacity: (1 - v).clamp(0.0, 1.0), child: child),
                 ),
               )
               .fadeIn(delay: stagger, duration: 380.ms)

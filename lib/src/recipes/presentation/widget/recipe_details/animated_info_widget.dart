@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/widget/animated_count.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widget/glass_container.dart';
 
 class AnimatedInfoWidget extends StatelessWidget {
@@ -85,8 +86,12 @@ class _InfoViewer extends StatelessWidget {
           value: amount,
           delay: start,
           duration: 1100.ms,
-          style:
-              Theme.of(context).textTheme.labelMedium!.copyWith(fontSize: 18),
+          style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              fontFamily: AppFonts.display,
+              fontWeight: FontWeight.w400,
+              fontSize: 24,
+              height: 1.1,
+              letterSpacing: 0),
         ),
         Text(name, style: Theme.of(context).textTheme.bodySmall),
       ],

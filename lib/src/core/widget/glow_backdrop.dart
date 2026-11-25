@@ -38,19 +38,13 @@ class GlowBackdrop extends StatelessWidget {
           .animate(delay: delay)
           .fadeIn(duration: 900.ms, curve: Curves.easeOut)
           .scaleXY(
-              begin: 0.55,
-              end: 1,
-              duration: 1200.ms,
-              curve: Curves.easeOutBack)
+              begin: 0.55, end: 1, duration: 1200.ms, curve: Curves.easeOutBack)
           // hand off to an endless breathing loop
           .animate(
             onPlay: (c) => c.repeat(reverse: true),
           )
           .scaleXY(
-              begin: 1,
-              end: 1.14,
-              duration: 2800.ms,
-              curve: Curves.easeInOut)
+              begin: 1, end: 1.14, duration: 2800.ms, curve: Curves.easeInOut)
           .fade(
               begin: 1, end: 0.65, duration: 2800.ms, curve: Curves.easeInOut),
     );

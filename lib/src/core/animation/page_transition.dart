@@ -86,19 +86,19 @@ class SharedAxisRoute<T> extends PageRouteBuilder<T> {
           pageBuilder: (context, a, b) => builder(context),
           transitionsBuilder: (context, animation, secondary, child) {
             const dist = 0.28;
-            final enter = CurvedAnimation(
-                parent: animation, curve: Curves.easeOutCubic);
-            final exit = CurvedAnimation(
-                parent: secondary, curve: Curves.easeInCubic);
+            final enter =
+                CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
+            final exit =
+                CurvedAnimation(parent: secondary, curve: Curves.easeInCubic);
             return SlideTransition(
               position: Tween(begin: const Offset(dist, 0), end: Offset.zero)
                   .animate(enter),
               child: FadeTransition(
                 opacity: enter,
                 child: SlideTransition(
-                  position: Tween(
-                          begin: Offset.zero, end: const Offset(-dist, 0))
-                      .animate(exit),
+                  position:
+                      Tween(begin: Offset.zero, end: const Offset(-dist, 0))
+                          .animate(exit),
                   child: FadeTransition(
                     opacity: Tween<double>(begin: 1, end: 0).animate(exit),
                     child: child,

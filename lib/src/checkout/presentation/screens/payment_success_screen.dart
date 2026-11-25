@@ -94,7 +94,11 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                         curve: Curves.elasticOut)
                     .animate(
                         onPlay: (c) => c.repeat(reverse: true), delay: 700.ms)
-                    .moveY(begin: 0, end: -8, duration: 2.seconds, curve: Curves.easeInOut),
+                    .moveY(
+                        begin: 0,
+                        end: -8,
+                        duration: 2.seconds,
+                        curve: Curves.easeInOut),
                 const SizedBox(height: 28),
                 Text('Payment Successful!',
                         style: text.displaySmall?.copyWith(fontSize: 26))
@@ -159,7 +163,10 @@ class _ReceiptCard extends StatelessWidget {
               ),
             ],
           ),
-        ).animate().fadeIn(delay: (1050 + i * 110).ms).slideX(begin: 0.12, end: 0);
+        )
+            .animate()
+            .fadeIn(delay: (1050 + i * 110).ms)
+            .slideX(begin: 0.12, end: 0);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24),
@@ -179,8 +186,8 @@ class _ReceiptCard extends StatelessWidget {
             AnimatedPrice(
               value: showAmount ? order.total : 0,
               duration: const Duration(milliseconds: 900),
-              style: text.titleLarge?.copyWith(
-                  color: AppColors.timeLineColor, fontWeight: FontWeight.bold),
+              style: text.titleLarge
+                  ?.copyWith(color: AppColors.timeLineColor, fontSize: 26),
             ),
             0,
           ),

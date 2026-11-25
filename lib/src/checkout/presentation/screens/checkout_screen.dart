@@ -177,10 +177,10 @@ class _BillCard extends StatelessWidget {
                     : text.bodySmall?.copyWith(fontSize: 15)),
             AnimatedPrice(
               value: value,
+              superscript: strong,
               style: strong
                   ? text.titleLarge?.copyWith(
-                      color: AppColors.onBoardingButtonColor,
-                      fontWeight: FontWeight.bold)
+                      color: AppColors.onBoardingButtonColor, fontSize: 28)
                   : text.titleMedium?.copyWith(fontWeight: FontWeight.w600),
             ),
           ],
@@ -259,7 +259,7 @@ class _PayBar extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.bold),
+                    ?.copyWith(fontSize: 28),
               ),
             ],
           ),
@@ -286,8 +286,9 @@ class _PayBar extends StatelessWidget {
                   'Proceed to Payment',
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.2),
                 ),
               ),
             ),

@@ -18,20 +18,21 @@ class AnimatedCategoryList extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.only(left: 15),
-        children: List.generate(_categories.length, (index) => _categories[index])
-            .animate(interval: 90.ms, delay: categoryListDelayDuration)
-            .slideX(
-                duration: categoryListPlayDuration,
-                begin: 1.6,
-                end: 0,
-                curve: Curves.easeOutBack)
-            .fadeIn(duration: 350.ms)
-            .scaleXY(begin: 0.7, end: 1, curve: Curves.easeOutBack)
-            .blurX(begin: 6, end: 0, duration: 300.ms)
-            .shimmer(
-                delay: 200.ms,
-                duration: 700.ms,
-                color: Colors.white.withValues(alpha: 0.25)),
+        children:
+            List.generate(_categories.length, (index) => _categories[index])
+                .animate(interval: 90.ms, delay: categoryListDelayDuration)
+                .slideX(
+                    duration: categoryListPlayDuration,
+                    begin: 1.6,
+                    end: 0,
+                    curve: Curves.easeOutBack)
+                .fadeIn(duration: 350.ms)
+                .scaleXY(begin: 0.7, end: 1, curve: Curves.easeOutBack)
+                .blurX(begin: 6, end: 0, duration: 300.ms)
+                .shimmer(
+                    delay: 200.ms,
+                    duration: 700.ms,
+                    color: Colors.white.withValues(alpha: 0.25)),
       ),
     );
   }

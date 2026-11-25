@@ -119,13 +119,11 @@ class _CheckmarkPainter extends CustomPainter {
       const firstLegShare = 0.4;
       if (tickT <= firstLegShare) {
         final l = tickT / firstLegShare;
-        tick.lineTo(
-            p1.dx + (p2.dx - p1.dx) * l, p1.dy + (p2.dy - p1.dy) * l);
+        tick.lineTo(p1.dx + (p2.dx - p1.dx) * l, p1.dy + (p2.dy - p1.dy) * l);
       } else {
         tick.lineTo(p2.dx, p2.dy);
         final l = (tickT - firstLegShare) / (1 - firstLegShare);
-        tick.lineTo(
-            p2.dx + (p3.dx - p2.dx) * l, p2.dy + (p3.dy - p2.dy) * l);
+        tick.lineTo(p2.dx + (p3.dx - p2.dx) * l, p2.dy + (p3.dy - p2.dy) * l);
       }
 
       canvas.drawPath(

@@ -60,7 +60,7 @@ class _AnimatedNutritionText extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        "${nutrition["calories"]}cal \t\t\t\t${nutrition["protein"]}protein",
+        "${nutrition["calories"]} KCAL  ·  ${nutrition["protein"]}G PROTEIN",
         style: Theme.of(context).textTheme.labelMedium,
       )
           .animate()

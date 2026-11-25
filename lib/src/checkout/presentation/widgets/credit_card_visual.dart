@@ -67,9 +67,7 @@ class _CreditCardVisualState extends State<CreditCardVisual>
           );
         },
       ),
-    )
-        .animate(onPlay: (c) => c.repeat(reverse: true))
-        .custom(
+    ).animate(onPlay: (c) => c.repeat(reverse: true)).custom(
           delay: 900.ms,
           duration: 3.seconds,
           curve: Curves.easeInOut,
@@ -97,12 +95,14 @@ const _themes = {
   PaymentMethod.visa: _CardTheme(
       [Color(0xff2A2F4F), Color(0xff5B4B8A), Color(0xff8A5FBF)],
       Color(0xff5B4B8A)),
-  PaymentMethod.applePay:
-      _CardTheme([Color(0xff1C1C1E), Color(0xff2C2C2E), Color(0xff3A3A3C)], Colors.black),
+  PaymentMethod.applePay: _CardTheme(
+      [Color(0xff1C1C1E), Color(0xff2C2C2E), Color(0xff3A3A3C)], Colors.black),
   PaymentMethod.paypal: _CardTheme(
-      [Color(0xff003087), Color(0xff0070BA), Color(0xff009CDE)], Color(0xff0070BA)),
+      [Color(0xff003087), Color(0xff0070BA), Color(0xff009CDE)],
+      Color(0xff0070BA)),
   PaymentMethod.cash: _CardTheme(
-      [Color(0xff0B6E4F), Color(0xff11835E), Color(0xff14A76C)], Color(0xff14A76C)),
+      [Color(0xff0B6E4F), Color(0xff11835E), Color(0xff14A76C)],
+      Color(0xff14A76C)),
 };
 
 class _CardFace extends StatelessWidget {
@@ -237,7 +237,8 @@ class _CardFace extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Flexible(child: Text(left, style: style, overflow: TextOverflow.ellipsis)),
+        Flexible(
+            child: Text(left, style: style, overflow: TextOverflow.ellipsis)),
         Text(right, style: style),
       ],
     );
