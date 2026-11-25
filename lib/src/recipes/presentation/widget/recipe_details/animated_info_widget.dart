@@ -10,12 +10,14 @@ class AnimatedInfoWidget extends StatelessWidget {
   final Duration infoDelayTime;
   final Duration infoPlayTime;
   final BoxConstraints constraints;
+  final Color accent;
   const AnimatedInfoWidget({
     super.key,
     required this.nutrition,
     required this.infoDelayTime,
     required this.infoPlayTime,
     required this.constraints,
+    this.accent = const Color(0xffFFECB3),
   });
 
   @override
@@ -31,17 +33,22 @@ class AnimatedInfoWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _InfoViewer(
-              name: 'Kcal', amount: nutrition["calories"]!, start: start),
+              name: 'Kcal',
+              amount: nutrition["calories"]!,
+              start: start,
+              color: accent),
           _divider(start + 120.ms),
           _InfoViewer(
               name: 'Protein',
               amount: nutrition["protein"]!,
-              start: start + 140.ms),
+              start: start + 140.ms,
+              color: accent),
           _divider(start + 260.ms),
           _InfoViewer(
               name: 'Prep Time',
               amount: nutrition["prepTime"]!,
-              start: start + 280.ms),
+              start: start + 280.ms,
+              color: accent),
         ]
             .animate(interval: 140.ms, delay: start)
             .fadeIn(duration: infoPlayTime, curve: Curves.easeOut)
@@ -71,10 +78,12 @@ class _InfoViewer extends StatelessWidget {
   final String name;
   final num amount;
   final Duration start;
+  final Color color;
   const _InfoViewer({
     required this.name,
     required this.amount,
     required this.start,
+    required this.color,
   });
 
   @override
@@ -88,6 +97,7 @@ class _InfoViewer extends StatelessWidget {
           duration: 1100.ms,
           style: Theme.of(context).textTheme.labelMedium!.copyWith(
               fontFamily: AppFonts.display,
+              color: color,
               fontWeight: FontWeight.w400,
               fontSize: 24,
               height: 1.1,

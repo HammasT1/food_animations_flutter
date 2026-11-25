@@ -9,12 +9,14 @@ class AnimatedDishWidget extends StatelessWidget {
   final String imageUrl;
   final Duration dishPlayTime;
   final String heroTag;
+  final Color glowColor;
   const AnimatedDishWidget({
     super.key,
     required this.constraints,
     required this.imageUrl,
     required this.dishPlayTime,
     this.heroTag = '',
+    this.glowColor = const Color(0xffFFD54F),
   });
 
   @override
@@ -25,10 +27,20 @@ class AnimatedDishWidget extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          const GlowBackdrop(
-              size: 300, maxOpacity: 0.4, delay: Duration(milliseconds: 300)),
-          const Positioned.fill(
-            child: RisingParticles(count: 10, maxRadius: 26),
+          TweenAnimationBuilder<Color?>(
+            tween: ColorTween(end: glowColor),
+            duration: const Duration(milliseconds: 700),
+            builder: (context, c, _) => GlowBackdrop(
+                color: c!,
+                size: 300,
+                maxOpacity: 0.5,
+                delay: const Duration(milliseconds: 300)),
+          ),
+          Positioned.fill(
+            child: RisingParticles(
+                count: 10,
+                maxRadius: 26,
+                color: Color.lerp(glowColor, Colors.white, 0.6)!),
           ),
           Hero(
             tag: heroTag.isEmpty ? 'dish-$imageUrl' : heroTag,

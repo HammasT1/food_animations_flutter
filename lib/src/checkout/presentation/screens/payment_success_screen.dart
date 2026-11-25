@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:dribbble_challenge/src/core/theme/app_colors.dart';
+import 'package:dribbble_challenge/src/core/theme/dish_accent.dart';
 import 'package:dribbble_challenge/src/core/widget/animated_checkmark.dart';
 import 'package:dribbble_challenge/src/core/widget/animated_price.dart';
 import 'package:dribbble_challenge/src/core/widget/confetti_overlay.dart';
@@ -8,6 +9,7 @@ import 'package:dribbble_challenge/src/checkout/domain/order_draft.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PaymentSuccessScreen extends StatefulWidget {
   final OrderDraft order;
@@ -126,8 +128,21 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
             ),
           ),
           if (_confetti)
-            const Positioned.fill(
-              child: IgnorePointer(child: ConfettiOverlay()),
+            Positioned.fill(
+              child: IgnorePointer(
+                // confetti in the colours of the dish that was ordered
+                child: Consumer(builder: (context, ref, _) {
+                  final accent =
+                      watchDishAccent(ref, widget.order.recipe.imageUrl);
+                  return ConfettiOverlay(colors: [
+                    accent,
+                    Color.lerp(accent, Colors.white, 0.4)!,
+                    Color.lerp(accent, Colors.black, 0.2)!,
+                    const Color(0xffFFC107),
+                    Colors.white,
+                  ]);
+                }),
+              ),
             ),
         ],
       ),

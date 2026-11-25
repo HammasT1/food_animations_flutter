@@ -8,10 +8,14 @@ class AnnotatedScaffold extends StatelessWidget {
 
   /// Paints drifting coloured light behind the screen for the glass surfaces.
   final bool ambient;
+
+  /// Tints the lead ambient light (e.g. with the current dish's colour).
+  final Color? accent;
   const AnnotatedScaffold({
     super.key,
     required this.child,
     this.ambient = true,
+    this.accent,
   });
 
   @override
@@ -22,7 +26,10 @@ class AnnotatedScaffold extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            if (ambient) const AmbientBackground(),
+            if (ambient)
+              accent == null
+                  ? const AmbientBackground()
+                  : AmbientBackground(accent: accent!),
             SafeArea(child: child),
           ],
         ),

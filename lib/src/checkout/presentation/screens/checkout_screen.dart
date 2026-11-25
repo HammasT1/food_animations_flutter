@@ -1,29 +1,34 @@
 import 'package:dribbble_challenge/src/core/theme/app_colors.dart';
+import 'package:dribbble_challenge/src/core/theme/dish_accent.dart';
 import 'package:dribbble_challenge/src/core/widget/animated_price.dart';
 import 'package:dribbble_challenge/src/core/widget/annotated_scaffold.dart';
 import 'package:dribbble_challenge/src/core/widget/dashed_divider.dart';
 import 'package:dribbble_challenge/src/core/widget/glass_container.dart';
+import 'package:dribbble_challenge/src/core/widget/shine_sweep.dart';
 import 'package:dribbble_challenge/src/checkout/domain/order_draft.dart';
 import 'package:dribbble_challenge/src/checkout/presentation/widgets/quantity_stepper.dart';
 import 'package:dribbble_challenge/src/recipes/domain/recipe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CheckoutScreen extends StatefulWidget {
+class CheckoutScreen extends ConsumerStatefulWidget {
   final Recipe recipe;
   const CheckoutScreen({super.key, required this.recipe});
 
   @override
-  State<CheckoutScreen> createState() => _CheckoutScreenState();
+  ConsumerState<CheckoutScreen> createState() => _CheckoutScreenState();
 }
 
-class _CheckoutScreenState extends State<CheckoutScreen> {
+class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   late final OrderDraft _order = OrderDraft(recipe: widget.recipe);
 
   @override
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
+    final accent = watchDishAccent(ref, widget.recipe.imageUrl);
     return AnnotatedScaffold(
+      accent: accent,
       child: Column(
         children: [
           const _Header(title: 'Checkout'),
@@ -33,6 +38,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               children: [
                 _OrderCard(
                   order: _order,
+                  accent: accent,
                   onQty: (q) => setState(() => _order.quantity = q),
                 )
                     .animate()
@@ -45,7 +51,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     .fadeIn(delay: 260.ms)
                     .slideX(begin: 0.2, end: 0),
                 const SizedBox(height: 12),
-                _BillCard(order: _order),
+                _BillCard(order: _order, accent: accent),
                 const SizedBox(height: 18),
                 _PromoStrip()
                     .animate()
@@ -56,6 +62,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ),
           _PayBar(
             total: _order.total,
+            accent: accent,
             onPressed: () => Navigator.of(context).pushNamed(
               'payment_method',
               arguments: _order,
@@ -97,7 +104,9 @@ class _Header extends StatelessWidget {
 class _OrderCard extends StatelessWidget {
   final OrderDraft order;
   final ValueChanged<int> onQty;
-  const _OrderCard({required this.order, required this.onQty});
+  final Color accent;
+  const _OrderCard(
+      {required this.order, required this.onQty, required this.accent});
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +147,8 @@ class _OrderCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text('\$${order.unitPrice.toStringAsFixed(2)} each',
-                        style: text.labelMedium?.copyWith(fontSize: 14)),
+                        style: text.labelMedium?.copyWith(
+                            fontSize: 14, color: softAccent(accent))),
                   ],
                 ),
               ),
@@ -149,7 +159,8 @@ class _OrderCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Quantity', style: text.titleMedium),
-              QuantityStepper(value: order.quantity, onChanged: onQty),
+              QuantityStepper(
+                  value: order.quantity, onChanged: onQty, accentColor: accent),
             ],
           ),
         ],
@@ -160,7 +171,8 @@ class _OrderCard extends StatelessWidget {
 
 class _BillCard extends StatelessWidget {
   final OrderDraft order;
-  const _BillCard({required this.order});
+  final Color accent;
+  const _BillCard({required this.order, required this.accent});
 
   @override
   Widget build(BuildContext context) {
@@ -179,8 +191,8 @@ class _BillCard extends StatelessWidget {
               value: value,
               superscript: strong,
               style: strong
-                  ? text.titleLarge?.copyWith(
-                      color: AppColors.onBoardingButtonColor, fontSize: 28)
+                  ? text.titleLarge
+                      ?.copyWith(color: softAccent(accent), fontSize: 28)
                   : text.titleMedium?.copyWith(fontWeight: FontWeight.w600),
             ),
           ],
@@ -239,7 +251,9 @@ class _PromoStrip extends StatelessWidget {
 class _PayBar extends StatelessWidget {
   final double total;
   final VoidCallback onPressed;
-  const _PayBar({required this.total, required this.onPressed});
+  final Color accent;
+  const _PayBar(
+      {required this.total, required this.onPressed, required this.accent});
 
   @override
   Widget build(BuildContext context) {
@@ -267,29 +281,42 @@ class _PayBar extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: onPressed,
-              child: Container(
-                height: 60,
-                alignment: Alignment.center,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 600),
                 decoration: BoxDecoration(
-                  color: AppColors.onBoardingButtonColor,
                   borderRadius: BorderRadius.circular(30),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.onBoardingButtonColor
-                          .withValues(alpha: 0.4),
+                      color: accent.withValues(alpha: 0.4),
                       blurRadius: 24,
                       offset: const Offset(0, 8),
                     ),
                   ],
                 ),
-                child: const Text(
-                  'Proceed to Payment',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.2),
-                ),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 600),
+                  height: 60,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color.lerp(accent, Colors.white, 0.18)!,
+                        accent,
+                      ],
+                    ),
+                  ),
+                  child: Text(
+                    'Proceed to Payment',
+                    style: TextStyle(
+                        color: onAccent(accent),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.2),
+                  ),
+                ).shineSweep(),
               ),
             ),
           ),

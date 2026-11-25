@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:dribbble_challenge/src/core/theme/app_colors.dart';
+import 'package:dribbble_challenge/src/core/widget/animated_gradient_border.dart';
 import 'package:dribbble_challenge/src/core/widget/glass_container.dart';
 import 'package:dribbble_challenge/src/checkout/domain/order_draft.dart';
 
@@ -53,54 +54,64 @@ class PaymentMethodCard extends StatelessWidget {
               )
             ],
           ),
-          child: GlassBlur(
+          // rotating ring of light on the selected method
+          child: AnimatedGradientBorder(
+            active: selected,
             borderRadius: BorderRadius.circular(20),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 260),
-              curve: Curves.easeOut,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color.alphaBlend(Colors.white.withValues(alpha: 0.08),
-                        AppColors.cardColor.withValues(alpha: 0.6)),
-                    AppColors.cardColor.withValues(alpha: 0.55),
+            colors: const [
+              AppColors.timeLineColor,
+              Color(0xff1DE9B6),
+              Color(0xffE6FFD9),
+              Color(0xff00C853),
+            ],
+            child: GlassBlur(
+              borderRadius: BorderRadius.circular(20),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 260),
+                curve: Curves.easeOut,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color.alphaBlend(Colors.white.withValues(alpha: 0.08),
+                          AppColors.cardColor.withValues(alpha: 0.6)),
+                      AppColors.cardColor.withValues(alpha: 0.55),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.14),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child:
+                          Icon(_icons[method], color: Colors.white, size: 22),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(method.label, style: text.titleMedium),
+                          const SizedBox(height: 2),
+                          Text(method.detail, style: text.bodySmall),
+                        ],
+                      ),
+                    ),
+                    _Radio(selected: selected),
                   ],
                 ),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: selected
-                      ? AppColors.timeLineColor
-                      : Colors.white.withValues(alpha: 0.14),
-                  width: selected ? 2 : 1,
-                ),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(_icons[method], color: Colors.white, size: 22),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(method.label, style: text.titleMedium),
-                        const SizedBox(height: 2),
-                        Text(method.detail, style: text.bodySmall),
-                      ],
-                    ),
-                  ),
-                  _Radio(selected: selected),
-                ],
               ),
             ),
           ),

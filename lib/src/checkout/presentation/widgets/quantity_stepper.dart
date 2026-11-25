@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dribbble_challenge/src/core/theme/app_colors.dart';
+import 'package:dribbble_challenge/src/core/theme/dish_accent.dart';
 
 /// − [ n ] +  with a springy digit swap and a tactile bump.
 class QuantityStepper extends StatelessWidget {
@@ -8,6 +9,7 @@ class QuantityStepper extends StatelessWidget {
   final ValueChanged<int> onChanged;
   final int min;
   final int max;
+  final Color accentColor;
 
   const QuantityStepper({
     super.key,
@@ -15,6 +17,7 @@ class QuantityStepper extends StatelessWidget {
     required this.onChanged,
     this.min = 1,
     this.max = 20,
+    this.accentColor = AppColors.onBoardingButtonColor,
   });
 
   void _bump(int next) {
@@ -59,7 +62,7 @@ class QuantityStepper extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge
-                      ?.copyWith(fontWeight: FontWeight.bold),
+                      ?.copyWith(fontSize: 24),
                 ),
               ),
             ),
@@ -67,7 +70,7 @@ class QuantityStepper extends StatelessWidget {
           _RoundButton(
             icon: Icons.add_rounded,
             enabled: value < max,
-            accent: true,
+            accent: accentColor,
             onTap: () => _bump(value + 1),
           ),
         ],
@@ -79,13 +82,13 @@ class QuantityStepper extends StatelessWidget {
 class _RoundButton extends StatefulWidget {
   final IconData icon;
   final bool enabled;
-  final bool accent;
+  final Color? accent;
   final VoidCallback onTap;
   const _RoundButton({
     required this.icon,
     required this.enabled,
     required this.onTap,
-    this.accent = false,
+    this.accent,
   });
 
   @override
@@ -105,20 +108,21 @@ class _RoundButtonState extends State<_RoundButton> {
       child: AnimatedScale(
         scale: _s,
         duration: const Duration(milliseconds: 120),
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 400),
           width: 38,
           height: 38,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: widget.accent && widget.enabled
-                ? AppColors.onBoardingButtonColor
+            color: widget.accent != null && widget.enabled
+                ? widget.accent
                 : Colors.white.withValues(alpha: 0.10),
           ),
           child: Icon(
             widget.icon,
             size: 20,
-            color: widget.accent && widget.enabled
-                ? Colors.black
+            color: widget.accent != null && widget.enabled
+                ? onAccent(widget.accent!)
                 : (widget.enabled ? Colors.white : Colors.white30),
           ),
         ),

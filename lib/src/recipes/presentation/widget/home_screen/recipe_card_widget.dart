@@ -1,10 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:dribbble_challenge/src/core/theme/dish_accent.dart';
 import 'package:dribbble_challenge/src/core/widget/glass_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/recipe.dart';
 
-class RecipeCardWidget extends StatelessWidget {
+class RecipeCardWidget extends ConsumerWidget {
   final Recipe recipe;
   const RecipeCardWidget({
     super.key,
@@ -12,8 +14,9 @@ class RecipeCardWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final playDuration = 600.ms;
+    final accent = watchDishAccent(ref, recipe.imageUrl);
     return ConstrainedBox(
       constraints: const BoxConstraints(maxHeight: 200),
       child: GlassContainer(
@@ -22,10 +25,16 @@ class RecipeCardWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _AnimatedImageWidget(
-              imageUrl: recipe.imageUrl,
-              heroTag: 'dish-${recipe.id}',
-              playDuration: playDuration,
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                _DishGlow(color: accent),
+                _AnimatedImageWidget(
+                  imageUrl: recipe.imageUrl,
+                  heroTag: 'dish-${recipe.id}',
+                  playDuration: playDuration,
+                ),
+              ],
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -33,6 +42,7 @@ class RecipeCardWidget extends StatelessWidget {
                 _AnimatedNutritionText(
                   playDuration: playDuration,
                   nutrition: recipe.nutrition,
+                  color: softAccent(accent),
                 ),
                 _AnimatedNameWidget(
                     playDuration: playDuration, name: recipe.name),
@@ -47,12 +57,44 @@ class RecipeCardWidget extends StatelessWidget {
   }
 }
 
+/// A soft pool of the dish's own colour behind the plate.
+class _DishGlow extends StatelessWidget {
+  final Color color;
+  const _DishGlow({required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<Color?>(
+      tween: ColorTween(end: color),
+      duration: const Duration(milliseconds: 700),
+      builder: (context, c, _) => Container(
+        width: 170,
+        height: 170,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: RadialGradient(colors: [
+            c!.withValues(alpha: 0.45),
+            c.withValues(alpha: 0.12),
+            c.withValues(alpha: 0),
+          ], stops: const [
+            0.0,
+            0.55,
+            1.0
+          ]),
+        ),
+      ),
+    ).animate().fadeIn(delay: 400.ms, duration: 800.ms);
+  }
+}
+
 class _AnimatedNutritionText extends StatelessWidget {
   final Duration playDuration;
   final Map<String, dynamic> nutrition;
+  final Color color;
   const _AnimatedNutritionText({
     required this.playDuration,
     required this.nutrition,
+    required this.color,
   });
 
   @override
@@ -61,7 +103,7 @@ class _AnimatedNutritionText extends StatelessWidget {
       padding: const EdgeInsets.only(top: 20),
       child: Text(
         "${nutrition["calories"]} KCAL  ·  ${nutrition["protein"]}G PROTEIN",
-        style: Theme.of(context).textTheme.labelMedium,
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(color: color),
       )
           .animate()
           .fadeIn(delay: 250.ms, duration: 350.ms)
