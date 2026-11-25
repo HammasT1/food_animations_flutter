@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/widget/animated_count.dart';
+import '../../../../core/widget/glass_container.dart';
 
 class AnimatedInfoWidget extends StatelessWidget {
   final Map<String, num> nutrition;
@@ -19,13 +20,12 @@ class AnimatedInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final start = infoDelayTime + 400.ms;
-    return Container(
+    return GlassContainer(
       width: constraints.maxWidth,
       height: constraints.maxHeight * 0.1,
       margin: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.white30, width: 1.3),
-          borderRadius: BorderRadius.circular(20)),
+      borderRadius: BorderRadius.circular(20),
+      opacity: 0.4,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -57,9 +57,13 @@ class AnimatedInfoWidget extends StatelessWidget {
             color: Colors.white.withValues(alpha: 0.18));
   }
 
-  Widget _divider(Duration delay) => Container(width: 1.2, height: 24, color: Colors.white24)
-      .animate()
-      .scaleY(begin: 0, end: 1, delay: delay, duration: 300.ms, curve: Curves.easeOut);
+  Widget _divider(Duration delay) =>
+      Container(width: 1.2, height: 24, color: Colors.white24).animate().scaleY(
+          begin: 0,
+          end: 1,
+          delay: delay,
+          duration: 300.ms,
+          curve: Curves.easeOut);
 }
 
 class _InfoViewer extends StatelessWidget {

@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:dribbble_challenge/src/core/widget/glass_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../domain/recipe.dart';
@@ -15,7 +16,9 @@ class RecipeCardWidget extends StatelessWidget {
     final playDuration = 600.ms;
     return ConstrainedBox(
       constraints: const BoxConstraints(maxHeight: 200),
-      child: Card(
+      child: GlassContainer(
+        margin: const EdgeInsets.fromLTRB(10, 15, 10, 0),
+        borderRadius: BorderRadius.circular(24),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -100,7 +103,11 @@ class _AnimatedImageWidget extends StatelessWidget {
               end: const Offset(1, 1),
               duration: playDuration,
               curve: Curves.easeOutBack)
-          .rotate(begin: -0.35, end: 0, duration: playDuration, curve: Curves.easeOutCubic)
+          .rotate(
+              begin: -0.35,
+              end: 0,
+              duration: playDuration,
+              curve: Curves.easeOutCubic)
           .fadeIn(duration: 350.ms)
           .shimmer(
               delay: playDuration - 100.ms,

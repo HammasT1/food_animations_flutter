@@ -3,6 +3,7 @@ import 'package:dribbble_challenge/src/checkout/domain/order_draft.dart';
 import 'package:dribbble_challenge/src/core/theme/app_colors.dart';
 import 'package:dribbble_challenge/src/core/widget/annotated_scaffold.dart';
 import 'package:dribbble_challenge/src/core/widget/animated_price.dart';
+import 'package:dribbble_challenge/src/core/widget/glass_container.dart';
 import 'package:dribbble_challenge/src/recipes/presentation/widget/recipe_details/recipe_details_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:dribbble_challenge/src/recipes/domain/recipe.dart';
@@ -77,20 +78,12 @@ class _OrderBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 26, 20, 20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          stops: const [0.0, 0.35, 0.6],
-          colors: [
-            AppColors.scaffoldBackgroundColor.withValues(alpha: 0),
-            AppColors.cardColor,
-            AppColors.cardColor,
-          ],
-        ),
-      ),
+    // a frosted "dock" floating over the panel, with the CTA inside it
+    return GlassContainer(
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      padding: const EdgeInsets.all(7),
+      borderRadius: BorderRadius.circular(38),
+      opacity: 0.45,
       child: GestureDetector(
         onTap: onTap,
         child: Container(
@@ -134,6 +127,7 @@ class _OrderBar extends StatelessWidget {
           onPlay: (c) => c.repeat(reverse: true),
           delay: 2100.ms,
         )
-        .scaleXY(begin: 1, end: 1.03, duration: 1300.ms, curve: Curves.easeInOut);
+        .scaleXY(
+            begin: 1, end: 1.03, duration: 1300.ms, curve: Curves.easeInOut);
   }
 }

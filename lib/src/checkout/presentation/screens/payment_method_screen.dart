@@ -1,4 +1,4 @@
-import 'package:dribbble_challenge/src/core/theme/app_colors.dart';
+import 'package:dribbble_challenge/src/core/widget/glass_container.dart';
 import 'package:dribbble_challenge/src/core/widget/annotated_scaffold.dart';
 import 'package:dribbble_challenge/src/core/widget/morphing_pay_button.dart';
 import 'package:dribbble_challenge/src/checkout/domain/order_draft.dart';
@@ -31,9 +31,12 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
             padding: const EdgeInsets.fromLTRB(8, 8, 20, 4),
             child: Row(
               children: [
-                IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(Icons.arrow_back_ios_new, size: 22),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6, right: 12),
+                  child: GlassIconButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: Icons.arrow_back_ios_new,
+                  ),
                 ),
                 Text('Payment', style: text.headlineMedium),
               ]
@@ -67,17 +70,10 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(24, 14, 24, 20),
-            decoration: BoxDecoration(
-              color: AppColors.scaffoldBackgroundColor,
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.4),
-                    blurRadius: 20,
-                    offset: const Offset(0, -6)),
-              ],
-            ),
+          GlassContainer(
+            padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+            opacity: 0.6,
             child: MorphingPayButton(
               label: 'Pay \$${widget.order.total.toStringAsFixed(2)}',
               color: _successColor,

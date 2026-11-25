@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:dribbble_challenge/src/core/widget/glass_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -18,9 +19,12 @@ class AnimatedAppBarWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        IconButton(
-            onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(Icons.arrow_back_ios_new, size: 25)),
+        Padding(
+          padding: const EdgeInsets.only(left: 12, top: 6),
+          child: GlassIconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: Icons.arrow_back_ios_new),
+        ),
         Flexible(
           child: Text(
             name,
@@ -31,9 +35,11 @@ class AnimatedAppBarWidget extends StatelessWidget {
                 .copyWith(color: Colors.white),
           ),
         ),
-        IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.favorite_outline, size: 25)),
+        Padding(
+          padding: const EdgeInsets.only(right: 12, top: 6),
+          child:
+              GlassIconButton(onPressed: () {}, icon: Icons.favorite_outline),
+        ),
       ]
           .animate(interval: 120.ms, delay: appBarDelayTime)
           .fadeIn(duration: appBarPlayTime, curve: Curves.easeOut)

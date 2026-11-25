@@ -1,4 +1,4 @@
-import 'package:dribbble_challenge/src/core/theme/app_colors.dart';
+import 'package:dribbble_challenge/src/core/widget/glass_container.dart';
 import 'package:dribbble_challenge/src/recipes/domain/recipe.dart';
 import 'package:dribbble_challenge/src/recipes/presentation/widget/recipe_details/ingredients_card_list.dart';
 import 'package:dribbble_challenge/src/recipes/presentation/widget/recipe_details/time_line_widget.dart';
@@ -38,36 +38,40 @@ class AnimatedSlidingPanel extends AnimatedWidget {
     return SlidingUpPanel(
         header: header,
         margin: const EdgeInsets.symmetric(horizontal: 10),
-        color: AppColors.cardColor,
+        renderPanelSheet: false,
         maxHeight: constraints.maxHeight * 0.9,
         minHeight:
             constraints.maxHeight * (listenable as Animation<double>).value,
         borderRadius: BorderRadius.circular(30),
         body: body,
-        panel: Column(
-          children: [
-            const SizedBox(
-              height: 30,
-            ),
-            IngredientsCardList(
-              ingredientController: ingredientController,
-              recipe: recipe,
-              delayTime: baseDelayTime,
-              slidingDuration: slidingDuration,
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            const Divider(
-              color: Colors.white54,
-            ),
-            Expanded(
-                child: TimeLineWidget(
-              steps: recipe.steps,
-              isCheckedList:
-                  List.generate(recipe.steps.length, (index) => false),
-            ))
-          ],
-        ));
+        panel: GlassContainer(
+            borderRadius: BorderRadius.circular(30),
+            blur: 24,
+            opacity: 0.72,
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 30,
+                ),
+                IngredientsCardList(
+                  ingredientController: ingredientController,
+                  recipe: recipe,
+                  delayTime: baseDelayTime,
+                  slidingDuration: slidingDuration,
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                const Divider(
+                  color: Colors.white54,
+                ),
+                Expanded(
+                    child: TimeLineWidget(
+                  steps: recipe.steps,
+                  isCheckedList:
+                      List.generate(recipe.steps.length, (index) => false),
+                ))
+              ],
+            )));
   }
 }

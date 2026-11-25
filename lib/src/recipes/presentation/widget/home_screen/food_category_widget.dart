@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:dribbble_challenge/src/core/widget/glass_container.dart';
 import 'package:flutter/material.dart';
 
 class FoodCategoryWidget extends StatelessWidget {
@@ -12,13 +13,11 @@ class FoodCategoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      margin: const EdgeInsets.only(right: 15),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white30, width: 2),
-        borderRadius: BorderRadius.circular(25),
-      ),
+    return GlassContainer(
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      margin: const EdgeInsets.only(right: 12),
+      borderRadius: BorderRadius.circular(25),
+      opacity: 0.35,
       alignment: Alignment.center,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

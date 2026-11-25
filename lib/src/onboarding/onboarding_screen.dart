@@ -7,6 +7,7 @@ class OnBoardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AnnotatedScaffold(child: OnBoardingBodyWidget());
+    return const AnnotatedScaffold(
+        ambient: false, child: OnBoardingBodyWidget());
   }
 }

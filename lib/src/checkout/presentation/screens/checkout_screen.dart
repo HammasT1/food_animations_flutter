@@ -2,6 +2,7 @@ import 'package:dribbble_challenge/src/core/theme/app_colors.dart';
 import 'package:dribbble_challenge/src/core/widget/animated_price.dart';
 import 'package:dribbble_challenge/src/core/widget/annotated_scaffold.dart';
 import 'package:dribbble_challenge/src/core/widget/dashed_divider.dart';
+import 'package:dribbble_challenge/src/core/widget/glass_container.dart';
 import 'package:dribbble_challenge/src/checkout/domain/order_draft.dart';
 import 'package:dribbble_challenge/src/checkout/presentation/widgets/quantity_stepper.dart';
 import 'package:dribbble_challenge/src/recipes/domain/recipe.dart';
@@ -76,9 +77,12 @@ class _Header extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(8, 8, 20, 4),
       child: Row(
         children: [
-          IconButton(
-            onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(Icons.arrow_back_ios_new, size: 22),
+          Padding(
+            padding: const EdgeInsets.only(left: 6, right: 12),
+            child: GlassIconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: Icons.arrow_back_ios_new,
+            ),
           ),
           Text(title, style: Theme.of(context).textTheme.headlineMedium),
         ]
@@ -98,12 +102,9 @@ class _OrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
-    return Container(
+    return GlassContainer(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.cardColor,
-        borderRadius: BorderRadius.circular(24),
-      ),
+      borderRadius: BorderRadius.circular(24),
       child: Column(
         children: [
           Row(
@@ -114,7 +115,8 @@ class _OrderCard extends StatelessWidget {
                 child: SizedBox(
                   width: 92,
                   height: 92,
-                  child: Image.asset(order.recipe.imageUrl, fit: BoxFit.contain),
+                  child:
+                      Image.asset(order.recipe.imageUrl, fit: BoxFit.contain),
                 ),
               ),
               const SizedBox(width: 14),
@@ -189,12 +191,9 @@ class _BillCard extends StatelessWidget {
           .slideX(begin: 0.15, end: 0, curve: Curves.easeOutCubic);
     }
 
-    return Container(
+    return GlassContainer(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-      decoration: BoxDecoration(
-        color: AppColors.cardColor,
-        borderRadius: BorderRadius.circular(24),
-      ),
+      borderRadius: BorderRadius.circular(24),
       child: Column(
         children: [
           row('Subtotal', order.subtotal, 0),
@@ -218,7 +217,8 @@ class _PromoStrip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.timeLineColor.withValues(alpha: 0.5)),
+        border:
+            Border.all(color: AppColors.timeLineColor.withValues(alpha: 0.5)),
         color: AppColors.timeLineColor.withValues(alpha: 0.08),
       ),
       child: Row(
@@ -226,7 +226,8 @@ class _PromoStrip extends StatelessWidget {
           const Text('🎁', style: TextStyle(fontSize: 20)),
           const SizedBox(width: 12),
           Expanded(
-            child: Text('Free dessert added — chef\'s treat on your first order',
+            child: Text(
+                'Free dessert added — chef\'s treat on your first order',
                 style: Theme.of(context).textTheme.bodySmall),
           ),
         ],
@@ -242,17 +243,10 @@ class _PayBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 18),
-      decoration: BoxDecoration(
-        color: AppColors.scaffoldBackgroundColor,
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withValues(alpha: 0.4),
-              blurRadius: 20,
-              offset: const Offset(0, -6)),
-        ],
-      ),
+    return GlassContainer(
+      padding: const EdgeInsets.fromLTRB(20, 14, 20, 18),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+      opacity: 0.6,
       child: Row(
         children: [
           Column(
