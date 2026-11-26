@@ -8,6 +8,8 @@ import 'package:dribbble_challenge/src/onboarding/onboarding_screen.dart';
 import 'package:dribbble_challenge/src/recipes/domain/recipe.dart';
 import 'package:dribbble_challenge/src/recipes/presentation/screens/home_screen.dart';
 import 'package:dribbble_challenge/src/recipes/presentation/screens/recipe_details_screen.dart';
+import 'package:dribbble_challenge/src/tracking/domain/delivery_stage.dart';
+import 'package:dribbble_challenge/src/tracking/presentation/screens/order_tracking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -46,12 +48,16 @@ class DribbleChallenge extends StatelessWidget {
             ),
           'payment_method' => SharedAxisRoute(
               settings: settings,
-              builder: (context) => PaymentMethodScreen(
-                  order: settings.arguments as OrderDraft),
+              builder: (context) =>
+                  PaymentMethodScreen(order: settings.arguments as OrderDraft),
+            ),
+          'order_tracking' => SlideUpRoute(
+              settings: settings,
+              builder: (context) =>
+                  OrderTrackingScreen(args: settings.arguments as TrackingArgs),
             ),
           _ => NoAnimationTransition(
-              routeSettings: settings,
-              builder: (context) => const HomeScreen())
+              routeSettings: settings, builder: (context) => const HomeScreen())
         };
       },
       theme: mainTheme,

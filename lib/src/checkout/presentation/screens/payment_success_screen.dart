@@ -6,6 +6,7 @@ import 'package:dribbble_challenge/src/core/widget/animated_price.dart';
 import 'package:dribbble_challenge/src/core/widget/confetti_overlay.dart';
 import 'package:dribbble_challenge/src/core/widget/dashed_divider.dart';
 import 'package:dribbble_challenge/src/checkout/domain/order_draft.dart';
+import 'package:dribbble_challenge/src/tracking/domain/delivery_stage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -122,7 +123,11 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                   showAmount: _amount,
                 ),
                 const SizedBox(height: 16),
-                _Actions(bgColor: widget.bgColor),
+                _Actions(
+                  bgColor: widget.bgColor,
+                  trackingArgs:
+                      TrackingArgs(order: widget.order, orderId: _orderId),
+                ),
                 const SizedBox(height: 10),
               ],
             ),
@@ -220,7 +225,8 @@ class _ReceiptCard extends StatelessWidget {
 
 class _Actions extends StatelessWidget {
   final Color bgColor;
-  const _Actions({required this.bgColor});
+  final TrackingArgs trackingArgs;
+  const _Actions({required this.bgColor, required this.trackingArgs});
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +236,8 @@ class _Actions extends StatelessWidget {
         children: [
           Expanded(
             child: OutlinedButton(
-              onPressed: () {},
+              onPressed: () => Navigator.of(context)
+                  .pushNamed('order_tracking', arguments: trackingArgs),
               style: OutlinedButton.styleFrom(
                 foregroundColor: Colors.white,
                 side: const BorderSide(color: Colors.white54),
