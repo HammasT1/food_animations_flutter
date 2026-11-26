@@ -7,11 +7,15 @@ class AnimatedAppBarWidget extends StatelessWidget {
   final String name;
   final Duration appBarPlayTime;
   final Duration appBarDelayTime;
+
+  /// Extra action after the favourite button (e.g. the cart).
+  final Widget? trailing;
   const AnimatedAppBarWidget({
     super.key,
     required this.name,
     required this.appBarPlayTime,
     required this.appBarDelayTime,
+    this.trailing,
   });
 
   @override
@@ -25,9 +29,11 @@ class AnimatedAppBarWidget extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(),
               icon: Icons.arrow_back_ios_new),
         ),
-        Flexible(
+        const SizedBox(width: 10),
+        Expanded(
           child: Text(
             name,
+            textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context)
                 .textTheme
@@ -36,10 +42,15 @@ class AnimatedAppBarWidget extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 12, top: 6),
+          padding: EdgeInsets.only(right: trailing == null ? 12 : 8, top: 6),
           child:
               GlassIconButton(onPressed: () {}, icon: Icons.favorite_outline),
         ),
+        if (trailing != null)
+          Padding(
+            padding: const EdgeInsets.only(right: 12, top: 6),
+            child: trailing,
+          ),
       ]
           .animate(interval: 120.ms, delay: appBarDelayTime)
           .fadeIn(duration: appBarPlayTime, curve: Curves.easeOut)

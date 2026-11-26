@@ -1,3 +1,4 @@
+import 'package:dribbble_challenge/src/checkout/presentation/widgets/cart_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/constants/assets.dart';
@@ -28,6 +29,11 @@ class AnimatedAppBarWidget extends StatelessWidget {
           nameDelayDuration: nameDelayDuration,
         ),
         Expanded(child: Container()),
+        const CartButton()
+            .animate(delay: avatarSettle)
+            .fadeIn(duration: 400.ms)
+            .scaleXY(begin: 0.4, end: 1, curve: Curves.easeOutBack),
+        const SizedBox(width: 14),
         Stack(
           alignment: Alignment.center,
           children: [

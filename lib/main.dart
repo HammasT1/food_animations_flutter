@@ -43,8 +43,7 @@ class DribbleChallenge extends StatelessWidget {
             ),
           'checkout' => SlideUpRoute(
               settings: settings,
-              builder: (context) =>
-                  CheckoutScreen(recipe: settings.arguments as Recipe),
+              builder: (context) => const CheckoutScreen(),
             ),
           'payment_method' => SharedAxisRoute(
               settings: settings,

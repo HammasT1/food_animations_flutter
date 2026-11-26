@@ -5,53 +5,54 @@ import 'package:dribbble_challenge/src/core/widget/annotated_scaffold.dart';
 import 'package:dribbble_challenge/src/core/widget/dashed_divider.dart';
 import 'package:dribbble_challenge/src/core/widget/glass_container.dart';
 import 'package:dribbble_challenge/src/core/widget/shine_sweep.dart';
+import 'package:dribbble_challenge/src/checkout/domain/cart.dart';
 import 'package:dribbble_challenge/src/checkout/domain/order_draft.dart';
 import 'package:dribbble_challenge/src/checkout/presentation/widgets/quantity_stepper.dart';
-import 'package:dribbble_challenge/src/recipes/domain/recipe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CheckoutScreen extends ConsumerStatefulWidget {
-  final Recipe recipe;
-  const CheckoutScreen({super.key, required this.recipe});
+class CheckoutScreen extends ConsumerWidget {
+  const CheckoutScreen({super.key});
 
   @override
-  ConsumerState<CheckoutScreen> createState() => _CheckoutScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final lines = ref.watch(cartProvider);
+    if (lines.isEmpty) return const _EmptyCart();
 
-class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
-  late final OrderDraft _order = OrderDraft(recipe: widget.recipe);
-
-  @override
-  Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
-    final accent = watchDishAccent(ref, widget.recipe.imageUrl);
+    final order = OrderDraft(lines: lines);
+    final accent = watchDishAccent(ref, order.recipe.imageUrl);
+    final cart = ref.read(cartProvider.notifier);
     return AnnotatedScaffold(
       accent: accent,
       child: Column(
         children: [
-          const _Header(title: 'Checkout'),
+          _Header(title: 'Checkout', count: order.itemCount),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
               children: [
-                _OrderCard(
-                  order: _order,
-                  accent: accent,
-                  onQty: (q) => setState(() => _order.quantity = q),
-                )
-                    .animate()
-                    .fadeIn(delay: 120.ms, duration: 450.ms)
-                    .slideY(begin: 0.25, end: 0, curve: Curves.easeOutCubic)
-                    .blurXY(begin: 8, end: 0),
-                const SizedBox(height: 22),
+                for (var i = 0; i < lines.length; i++)
+                  Padding(
+                    key: ValueKey(lines[i].recipe.id),
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: _LineCard(
+                      line: lines[i],
+                      onQty: (q) => cart.setQuantity(lines[i].recipe, q),
+                    )
+                        .animate()
+                        .fadeIn(delay: (120 + i * 90).ms, duration: 450.ms)
+                        .slideY(begin: 0.25, end: 0, curve: Curves.easeOutCubic)
+                        .blurXY(begin: 8, end: 0),
+                  ),
+                const SizedBox(height: 10),
                 Text('Bill details', style: text.titleMedium)
                     .animate()
                     .fadeIn(delay: 260.ms)
                     .slideX(begin: 0.2, end: 0),
                 const SizedBox(height: 12),
-                _BillCard(order: _order, accent: accent),
+                _BillCard(order: order, accent: accent),
                 const SizedBox(height: 18),
                 _PromoStrip()
                     .animate()
@@ -61,11 +62,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             ),
           ),
           _PayBar(
-            total: _order.total,
+            total: order.total,
             accent: accent,
             onPressed: () => Navigator.of(context).pushNamed(
               'payment_method',
-              arguments: _order,
+              arguments: order,
             ),
           ),
         ],
@@ -76,22 +77,38 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
 class _Header extends StatelessWidget {
   final String title;
-  const _Header({required this.title});
+  final int? count;
+  const _Header({required this.title, this.count});
 
   @override
   Widget build(BuildContext context) {
+    final text = Theme.of(context).textTheme;
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 8, 20, 4),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 6, right: 12),
+            padding: const EdgeInsets.only(left: 6, right: 12, bottom: 2),
             child: GlassIconButton(
               onPressed: () => Navigator.of(context).pop(),
               icon: Icons.arrow_back_ios_new,
             ),
           ),
-          Text(title, style: Theme.of(context).textTheme.headlineMedium),
+          Text(title, style: text.headlineMedium),
+          const Spacer(),
+          if (count != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 250),
+                child: Text(
+                  '$count ${count == 1 ? 'item' : 'items'}',
+                  key: ValueKey(count),
+                  style: text.bodySmall,
+                ),
+              ),
+            ),
         ]
             .animate(interval: 90.ms)
             .fadeIn(duration: 400.ms)
@@ -101,67 +118,105 @@ class _Header extends StatelessWidget {
   }
 }
 
-class _OrderCard extends StatelessWidget {
-  final OrderDraft order;
+/// One dish in the cart. Its stepper goes down to zero, which removes it.
+class _LineCard extends ConsumerWidget {
+  final CartLine line;
   final ValueChanged<int> onQty;
-  final Color accent;
-  const _OrderCard(
-      {required this.order, required this.onQty, required this.accent});
+  const _LineCard({required this.line, required this.onQty});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final text = Theme.of(context).textTheme;
+    final recipe = line.recipe;
+    final accent = watchDishAccent(ref, recipe.imageUrl);
+    return GlassContainer(
+      padding: const EdgeInsets.fromLTRB(12, 12, 14, 12),
+      borderRadius: BorderRadius.circular(24),
+      child: Row(
+        children: [
+          Hero(
+            tag: 'dish-${recipe.id}',
+            flightShuttleBuilder: (_, __, ___, ____, toCtx) => toCtx.widget,
+            child: SizedBox(
+              width: 78,
+              height: 78,
+              child: Image.asset(recipe.imageUrl, fit: BoxFit.contain),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(recipe.name,
+                    style: text.titleLarge?.copyWith(fontSize: 20),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis),
+                const SizedBox(height: 4),
+                Text('\$${line.unitPrice.toStringAsFixed(2)} each',
+                    style: text.labelMedium
+                        ?.copyWith(fontSize: 13, color: softAccent(accent))),
+                const SizedBox(height: 8),
+                QuantityStepper(
+                  value: line.quantity,
+                  onChanged: onQty,
+                  min: 0,
+                  accentColor: accent,
+                ),
+              ],
+            ),
+          ),
+          AnimatedPrice(
+            value: line.total,
+            style: text.titleLarge?.copyWith(fontSize: 22),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _EmptyCart extends StatelessWidget {
+  const _EmptyCart();
 
   @override
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
-    return GlassContainer(
-      padding: const EdgeInsets.all(16),
-      borderRadius: BorderRadius.circular(24),
+    return AnnotatedScaffold(
       child: Column(
         children: [
-          Row(
-            children: [
-              Hero(
-                tag: 'dish-${order.recipe.id}',
-                flightShuttleBuilder: (_, __, ___, ____, toCtx) => toCtx.widget,
-                child: SizedBox(
-                  width: 92,
-                  height: 92,
-                  child:
-                      Image.asset(order.recipe.imageUrl, fit: BoxFit.contain),
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(order.recipe.name,
-                        style: text.titleLarge, maxLines: 2),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        const Icon(Icons.schedule,
-                            size: 15, color: Colors.white54),
-                        const SizedBox(width: 4),
-                        Text('Ready in ${order.etaMinutes} min',
-                            style: text.bodySmall),
-                      ],
+          const _Header(title: 'Checkout'),
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.shopping_bag_outlined,
+                          size: 72, color: Colors.white38)
+                      .animate(onPlay: (c) => c.repeat(reverse: true))
+                      .moveY(begin: 0, end: -8, duration: 1600.ms),
+                  const SizedBox(height: 16),
+                  Text('Your cart is empty', style: text.titleLarge),
+                  const SizedBox(height: 6),
+                  Text('Add a dish to get started', style: text.bodySmall),
+                  const SizedBox(height: 22),
+                  OutlinedButton(
+                    onPressed: () => Navigator.of(context)
+                        .pushNamedAndRemoveUntil('home', (r) => r.isFirst),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      side: const BorderSide(color: Colors.white38),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 26, vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(26)),
                     ),
-                    const SizedBox(height: 8),
-                    Text('\$${order.unitPrice.toStringAsFixed(2)} each',
-                        style: text.labelMedium?.copyWith(
-                            fontSize: 14, color: softAccent(accent))),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Quantity', style: text.titleMedium),
-              QuantityStepper(
-                  value: order.quantity, onChanged: onQty, accentColor: accent),
-            ],
+                    child: const Text('Browse dishes',
+                        style: TextStyle(fontWeight: FontWeight.w700)),
+                  ),
+                ],
+              ).animate().fadeIn(duration: 400.ms).scaleXY(begin: 0.9, end: 1),
+            ),
           ),
         ],
       ),

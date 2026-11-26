@@ -5,6 +5,7 @@ import 'package:dribbble_challenge/src/core/widget/animated_checkmark.dart';
 import 'package:dribbble_challenge/src/core/widget/animated_price.dart';
 import 'package:dribbble_challenge/src/core/widget/confetti_overlay.dart';
 import 'package:dribbble_challenge/src/core/widget/dashed_divider.dart';
+import 'package:dribbble_challenge/src/checkout/domain/cart.dart';
 import 'package:dribbble_challenge/src/checkout/domain/order_draft.dart';
 import 'package:dribbble_challenge/src/tracking/domain/delivery_stage.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PaymentSuccessScreen extends StatefulWidget {
+class PaymentSuccessScreen extends ConsumerStatefulWidget {
   final OrderDraft order;
   final PaymentMethod method;
   final Color bgColor;
@@ -25,10 +26,11 @@ class PaymentSuccessScreen extends StatefulWidget {
   });
 
   @override
-  State<PaymentSuccessScreen> createState() => _PaymentSuccessScreenState();
+  ConsumerState<PaymentSuccessScreen> createState() =>
+      _PaymentSuccessScreenState();
 }
 
-class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
+class _PaymentSuccessScreenState extends ConsumerState<PaymentSuccessScreen> {
   bool _confetti = false;
   bool _amount = false;
   late final String _orderId = widget.order.orderId;
@@ -37,6 +39,10 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
   @override
   void initState() {
     super.initState();
+    // the order is paid — empty the cart (after this frame: providers
+    // must not change while the tree is building)
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => ref.read(cartProvider.notifier).clear());
     _timers.add(Timer(const Duration(milliseconds: 550), () {
       if (mounted) setState(() => _confetti = true);
       HapticFeedback.mediumImpact();

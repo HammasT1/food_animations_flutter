@@ -1,20 +1,50 @@
+import 'dart:math' as math;
+
 import 'package:dribbble_challenge/src/recipes/domain/recipe.dart';
 
-/// A mutable draft of an order while the user is in the checkout flow.
-class OrderDraft {
+/// Menu price of a dish.
+double unitPriceOf(Recipe recipe) =>
+    6.0 + (recipe.nutrition['calories']! / 100);
+
+/// One dish in the cart, with how many of it.
+class CartLine {
   final Recipe recipe;
-  int quantity;
+  final int quantity;
+  const CartLine({required this.recipe, this.quantity = 1});
 
-  OrderDraft({required this.recipe, this.quantity = 1});
+  double get unitPrice => unitPriceOf(recipe);
+  double get total => unitPrice * quantity;
 
-  double get unitPrice => 6.0 + (recipe.nutrition['calories']! / 100);
-  double get subtotal => unitPrice * quantity;
+  CartLine copyWith({int? quantity}) =>
+      CartLine(recipe: recipe, quantity: quantity ?? this.quantity);
+}
+
+/// An immutable snapshot of the cart, taken when the user heads to payment.
+class OrderDraft {
+  final List<CartLine> lines;
+
+  OrderDraft({required List<CartLine> lines})
+      : assert(lines.isNotEmpty, 'an order needs at least one dish'),
+        lines = List.unmodifiable(lines);
+
+  OrderDraft.single(Recipe recipe, {int quantity = 1})
+      : this(lines: [CartLine(recipe: recipe, quantity: quantity)]);
+
+  /// The lead dish — drives the accent colour and imagery downstream.
+  Recipe get recipe => lines.first.recipe;
+
+  int get itemCount => lines.fold(0, (n, l) => n + l.quantity);
+  double get subtotal => lines.fold(0.0, (s, l) => s + l.total);
   double get deliveryFee => 2.99;
   double get tax => subtotal * 0.08;
   double get total => subtotal + deliveryFee + tax;
 
-  /// Rough ready-in estimate, in minutes.
-  int get etaMinutes => 15 + (recipe.nutrition['prepTime']?.round() ?? 20);
+  /// Rough ready-in estimate, in minutes — the slowest dish sets the pace.
+  int get etaMinutes =>
+      15 +
+      lines
+          .map((l) => l.recipe.nutrition['prepTime']?.round() ?? 20)
+          .reduce(math.max);
 
   String get orderId {
     final base = recipe.id.padLeft(2, '0');
