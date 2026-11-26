@@ -30,35 +30,7 @@ class DribbleChallenge extends StatelessWidget {
     return MaterialApp(
       locale: DevicePreview.locale(context),
       home: const OnBoardingScreen(),
-      onGenerateRoute: (settings) {
-        return switch (settings.name) {
-          'home' => NoAnimationTransition(
-              routeSettings: settings,
-              builder: (context) => const HomeScreen(),
-            ),
-          'recipe_details' => NoAnimationTransition(
-              routeSettings: settings,
-              builder: (context) =>
-                  RecipeDetailsScreen(recipe: settings.arguments as Recipe),
-            ),
-          'checkout' => SlideUpRoute(
-              settings: settings,
-              builder: (context) => const CheckoutScreen(),
-            ),
-          'payment_method' => SharedAxisRoute(
-              settings: settings,
-              builder: (context) =>
-                  PaymentMethodScreen(order: settings.arguments as OrderDraft),
-            ),
-          'order_tracking' => SlideUpRoute(
-              settings: settings,
-              builder: (context) =>
-                  OrderTrackingScreen(args: settings.arguments as TrackingArgs),
-            ),
-          _ => NoAnimationTransition(
-              routeSettings: settings, builder: (context) => const HomeScreen())
-        };
-      },
+      onGenerateRoute: onGenerateAppRoute,
       theme: mainTheme,
       darkTheme: mainTheme,
       themeMode: ThemeMode.dark,
@@ -66,4 +38,34 @@ class DribbleChallenge extends StatelessWidget {
     );
   }
 }
-//a
+
+/// The app's named routes and the transition each one uses.
+Route<dynamic> onGenerateAppRoute(RouteSettings settings) {
+  return switch (settings.name) {
+    'home' => NoAnimationTransition(
+        routeSettings: settings,
+        builder: (context) => const HomeScreen(),
+      ),
+    'recipe_details' => NoAnimationTransition(
+        routeSettings: settings,
+        builder: (context) =>
+            RecipeDetailsScreen(recipe: settings.arguments as Recipe),
+      ),
+    'checkout' => SlideUpRoute(
+        settings: settings,
+        builder: (context) => const CheckoutScreen(),
+      ),
+    'payment_method' => SharedAxisRoute(
+        settings: settings,
+        builder: (context) =>
+            PaymentMethodScreen(order: settings.arguments as OrderDraft),
+      ),
+    'order_tracking' => SlideUpRoute(
+        settings: settings,
+        builder: (context) =>
+            OrderTrackingScreen(args: settings.arguments as TrackingArgs),
+      ),
+    _ => NoAnimationTransition(
+        routeSettings: settings, builder: (context) => const HomeScreen())
+  };
+}
